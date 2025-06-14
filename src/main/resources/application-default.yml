@@ -1,0 +1,12 @@
+app:
+  buckets:
+    - name: client1
+      max-requests: 100
+      seconds-refill: 30
+    - name: client2
+      max-requests: 100
+      seconds-refill: 30
+    - name: others
+      max-requests: 100
+      seconds-refill: 30
+  default-bucket: others

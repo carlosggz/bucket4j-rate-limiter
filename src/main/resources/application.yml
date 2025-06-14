@@ -1,0 +1,10 @@
+spring:
+  application.name: bucket4j-rate-limiter
+  data:
+    redis:
+      host: localhost
+      port: 6739
+
+app:
+  instance-id: ${random.uuid}
+  interceptor-routes: /api/v1/filtered/**

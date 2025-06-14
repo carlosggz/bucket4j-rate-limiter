@@ -1,0 +1,18 @@
+spring:
+  data:
+    redis:
+      port: 16379
+      host: localhost
+
+app:
+  buckets:
+    - name: client1
+      max-requests: 2
+      seconds-refill: 1
+    - name: client2
+      max-requests: 3
+      seconds-refill: 1
+    - name: others
+      max-requests: 1
+      seconds-refill: 1
+  default-bucket: others
