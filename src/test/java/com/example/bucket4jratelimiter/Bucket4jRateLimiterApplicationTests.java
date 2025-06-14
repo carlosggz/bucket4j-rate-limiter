@@ -3,6 +3,7 @@ package com.example.bucket4jratelimiter;
 import com.example.bucket4jratelimiter.model.Constants;
 import com.example.bucket4jratelimiter.config.BucketsProperties;
 import com.example.bucket4jratelimiter.utils.BaseIntegrationTest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
 
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
@@ -67,18 +69,22 @@ class Bucket4jRateLimiterApplicationTests extends BaseIntegrationTest {
 
         for (var result : results) {
             var response = result.get();
-            if (response == HttpStatus.OK.value()) {
+            if (response.getStatus() == HttpStatus.OK.value()) {
                 responseOk++;
-            } else if (response == HttpStatus.TOO_MANY_REQUESTS.value()) {
+            } else if (response.getStatus() == HttpStatus.TOO_MANY_REQUESTS.value()) {
                 responseKo++;
             }
+
+            var instanceId = response.getHeader(Constants.INSTANCE_HEADER);
+            assertNotNull(instanceId);
+            assertNotNull(UUID.fromString(instanceId));
         }
 
         assertEquals(2, responseOk);
         assertEquals(2, responseKo);
     }
 
-    private Callable<Integer> getCall(String url, String id, String value) {
+    private Callable<HttpServletResponse> getCall(String url, String id, String value) {
         return () -> mockMvc
                 .perform(
                         post(url, id)
@@ -86,7 +92,6 @@ class Bucket4jRateLimiterApplicationTests extends BaseIntegrationTest {
                                 .content(value)
                 )
                 .andReturn()
-                .getResponse()
-                .getStatus();
+                .getResponse();
     }
 }

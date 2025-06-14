@@ -1,7 +1,7 @@
 spring:
   data:
     redis:
-      host: localhost
+      host: host.docker.internal
       port: 6739
 
 app:
