@@ -14,7 +14,7 @@ sent in every request as a header.
 
 ### Before start
 - Start docker engine
-- Execute docker compose to start the redis server to share the rate limiter
+- Execute docker compose to start the postgresql server to share the rate limiter
   settings between instances. 
 
    ````
