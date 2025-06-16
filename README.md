@@ -59,3 +59,5 @@ be returned with code 429
 
   ``docker compose down``
 
+### notes
+- branch ``postgres-proxy-manage`` contains a version using postgresql as proxy manager instead of redis
