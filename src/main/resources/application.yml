@@ -1,10 +1,32 @@
 spring:
   application.name: bucket4j-rate-limiter
-  data:
-    redis:
-      host: localhost
-      port: 6739
+  datasource:
+    username: ${app.postgres.username}
+    password: ${app.postgres.password}
+    url: jdbc:postgresql://${app.postgres.hostname}:${app.postgres.port}/${app.postgres.database}
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: ${app.scheme}
+        globally_quoted_identifiers: true
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  flyway:
+    user: ${app.postgres.username}
+    password: ${app.postgres.password}
+    url: jdbc:postgresql://${app.postgres.hostname}:${app.postgres.port}/${app.postgres.database}
+    baseline-version: 0
+    baseline-on-migrate: true
+    locations:
+      - classpath:db
+    sql-migration-prefix: V
+    table: bucket4j_schema_version
+    schemas: ${app.scheme}
+    initSqls: CREATE SCHEMA IF NOT EXISTS "${app.scheme}"
 
 app:
   instance-id: ${random.uuid}
   interceptor-routes: /api/v1/filtered/**
+  scheme: bucket4j_rate_limiter

@@ -1,9 +1,3 @@
-spring:
-  data:
-    redis:
-      port: 16379
-      host: localhost
-
 app:
   buckets:
     - name: client1
@@ -16,3 +10,9 @@ app:
       max-requests: 1
       seconds-refill: 1
   default-bucket: others
+  postgres:
+    username: postgres
+    password: postgres
+    hostname: localhost
+    port: 5432
+    database: postgres

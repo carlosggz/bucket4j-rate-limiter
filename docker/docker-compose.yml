@@ -1,5 +1,12 @@
 services:
-  redis:
-    image: redis:alpine
+  db:
+    image: "postgres:13.4"
+    container_name: conciliator-postgres
     ports:
-      - "6739:6379"
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - './volumes/db:/mnt/db'

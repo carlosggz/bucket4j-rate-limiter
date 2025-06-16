@@ -2,6 +2,9 @@ buildscript {
     ext {
         springBootVersion = '3.4.5'
         bucket4jVersion = '8.9.0'
+        springCloudVersion = '2024.0.1'
+        flywayVersion = '10.19.0'
+        postgresqlVersion = '42.7.4'
     }
 }
 
@@ -27,14 +30,25 @@ repositories {
     mavenCentral()
 }
 
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
 dependencies {
     //spring boot
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    //database
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation "org.postgresql:postgresql:${postgresqlVersion}"
+    implementation "org.flywaydb:flyway-core:${flywayVersion}"
+    runtimeOnly "org.flywaydb:flyway-database-postgresql:${flywayVersion}"
 
     //bucket4j
     implementation "com.bucket4j:bucket4j-core:${bucket4jVersion}"
-    implementation "com.bucket4j:bucket4j-redis:${bucket4jVersion}"
+    implementation "com.bucket4j:bucket4j-postgresql:${bucket4jVersion}"
 
     //misc
     implementation 'org.apache.commons:commons-lang3:3.12.0'
@@ -42,8 +56,9 @@ dependencies {
     //test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    testImplementation 'org.signal:embedded-redis:0.9.1'
     testImplementation 'org.awaitility:awaitility:4.2.0'
+    testImplementation 'io.zonky.test:embedded-database-spring-test:2.6.0'
+    testImplementation 'io.zonky.test:embedded-postgres:2.0.7'
 }
 
 tasks.named('test') {
