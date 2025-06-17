@@ -30,3 +30,8 @@ app:
   instance-id: ${random.uuid}
   interceptor-routes: /api/v1/filtered/**
   scheme: bucket4j_rate_limiter
+  seconds-to-expire: 60
+  housekeeping:
+    max-buckets: 1000
+    threshold: 50
+    cron: "0 30 4 * * *"

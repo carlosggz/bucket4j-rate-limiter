@@ -1,7 +1,7 @@
 buildscript {
     ext {
         springBootVersion = '3.4.5'
-        bucket4jVersion = '8.9.0'
+        bucket4jVersion = '8.14.0'
         springCloudVersion = '2024.0.1'
         flywayVersion = '10.19.0'
         postgresqlVersion = '42.7.4'
@@ -47,8 +47,8 @@ dependencies {
     runtimeOnly "org.flywaydb:flyway-database-postgresql:${flywayVersion}"
 
     //bucket4j
-    implementation "com.bucket4j:bucket4j-core:${bucket4jVersion}"
-    implementation "com.bucket4j:bucket4j-postgresql:${bucket4jVersion}"
+    implementation "com.bucket4j:bucket4j_jdk17-core:${bucket4jVersion}"
+    implementation "com.bucket4j:bucket4j_jdk17-postgresql:${bucket4jVersion}"
 
     //misc
     implementation 'org.apache.commons:commons-lang3:3.12.0'
