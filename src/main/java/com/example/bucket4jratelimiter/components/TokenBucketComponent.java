@@ -3,6 +3,7 @@ package com.example.bucket4jratelimiter.components;
 import com.example.bucket4jratelimiter.config.BucketsProperties;
 import com.example.bucket4jratelimiter.model.BucketSettings;
 import io.github.bucket4j.BucketConfiguration;
+import io.github.bucket4j.distributed.BucketProxy;
 import io.github.bucket4j.distributed.proxy.ProxyManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
@@ -43,13 +44,23 @@ public class TokenBucketComponent {
     }
 
     public boolean tryConsumeToken(String bucketName) {
+       return getBucketConfiguration(bucketName)
+                .tryConsume(1);
+    }
+
+    public void consumeToken(String bucketName) throws InterruptedException {
+        getBucketConfiguration(bucketName)
+                .asBlocking()
+                .consume(1);
+    }
+
+    private BucketProxy getBucketConfiguration(String bucketName) {
         var configuration = Optional
                 .ofNullable(bucketName)
                 .filter(buckets::containsKey)
                 .orElse(defaultBucket);
 
         return proxyManager.builder()
-                .build(configuration, () -> this.buckets.get(configuration))
-                .tryConsume(1);
+                .build(configuration, () -> this.buckets.get(configuration));
     }
 }
